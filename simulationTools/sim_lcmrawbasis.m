@@ -1,6 +1,7 @@
 %sim_lcmrawbasis.m
 %Jamie Near, McGill University 2014.
 %Modified (greatly simplified) for new FID-A spin system definitions, 2018.
+%Modified by Julian P. Merkofer, 2025.
 %
 % USAGE:
 % [RF,out]=sim_lcmrawbasis(n,sw,Bfield,linewidth,metab,tau1,tau2,addref,makeraw,seq)
@@ -22,6 +23,7 @@
 % addref    = add reference at 0ppm (for use in LCModel makebasis) ['y' or 'n']
 % makeraw   = make output file for lcmodel ['y' or 'n']
 % seq       = pulse sequence ['se' for Spin Echo, 'p' for Press, 'st' for Steam, or 'l' for LASER]
+% path      = path to the directory where the output file will be saved.
 % metab     = one of the following choices
 %   'H2O'    = Water
 %   'Ala'    = Alanine
@@ -52,10 +54,10 @@
 % RF        = not used.
 % out       = Simulated basis spectrum in FID-A structure format.  
 
-function [RF,out]=sim_lcmrawbasis(n,sw,Bfield,linewidth,metab,tau1,tau2,addref,makeraw,seq)
+function [RF,out]=sim_lcmrawbasis(n,sw,Bfield,linewidth,metab,tau1,tau2,addref,makeraw,seq,path)
 
 
-load('spinSystems.mat');
+load('metabolites/spinSystems.mat');
 
 eval(['sys=sys' metab ';']);
 spins=0;
@@ -109,7 +111,7 @@ elseif makeraw=='n'||makeraw=='N'
 end
 
 if makeraw
-    RF=io_writelcmraw(out,[metab '.RAW'],metab);
+    RF=io_writelcmraw(out,[path metab '.RAW'],metab);
 else
     RF=[];
 end
